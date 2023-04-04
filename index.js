@@ -1,4 +1,5 @@
 import { addTodo, deleteTodo, getTodos } from "./api.js";
+import { renderLoginComponent } from "./components/login-component.js";
 
 let tasks = [];
 
@@ -16,24 +17,12 @@ const renderApp = () => {
   const appEl = document.getElementById("app");
 
   if (!token) {
-    const appHtml = `
-        <h1>Список задач</h1>
-        <div class="form">
-        <h3 class="form-title">Форма входа</h3>
-        <div class="form-row">
-            Логин
-            <input type="text" id="login-input" class="input" /><br>
-            Пароль
-            <input type="text" id="password-input" class="input" />
-        </div>
-        <br />
-        <button class="button" id="login-button">Войти</button>
-        </div>`;
-
-    appEl.innerHTML = appHtml;
-    document.getElementById("login-button").addEventListener("click", () => {
-      token = "Bearer cgascsbkas6g5g5g5g5g6g3983b43bc3bo3cc";
-      fetchTodosAndRender();
+    renderLoginComponent({
+      appEl,
+      setToken: (newToken) => {
+        token = newToken;
+      },
+      fetchTodosAndRender,
     });
     return;
   }
@@ -86,12 +75,11 @@ const renderApp = () => {
       const id = deleteButton.dataset.id;
 
       // Подписываемся на успешное завершение запроса с помощью then
-      deleteTodo(token, id)
-        .then((responseData) => {
-          // Получили данные и рендерим их в приложении
-          tasks = responseData.todos;
-          renderApp();
-        });
+      deleteTodo(token, id).then((responseData) => {
+        // Получили данные и рендерим их в приложении
+        tasks = responseData.todos;
+        renderApp();
+      });
 
       //   renderApp();
     });
