@@ -56,3 +56,19 @@ export function loginUser({ login, password }) {
     return response.json();
   });
 }
+
+export function registerUser({ login, password, name }) {
+    return fetch("https://webdev-hw-api.vercel.app/api/user", {
+      method: "POST",
+      body: JSON.stringify({
+        login,
+        password,
+        name,
+      }),
+    }).then((response) => {
+      if (response.status === 400) {
+          throw new Error ('пользователь с таким логином уже сущетсвует');
+      }
+      return response.json();
+    });
+  }
