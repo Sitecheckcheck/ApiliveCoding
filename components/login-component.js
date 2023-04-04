@@ -1,3 +1,5 @@
+import { login } from "../api.js";
+
 export function renderLoginComponent({ appEl, setToken, fetchTodosAndRender }) {
   const appHtml = `
         <h1>Список задач</h1>
@@ -17,6 +19,12 @@ export function renderLoginComponent({ appEl, setToken, fetchTodosAndRender }) {
   document.getElementById("login-button").addEventListener("click", () => {
     setToken("Bearer cgascsbkas6g5g5g5g5g6g3983b43bc3bo3cc");
 
-    fetchTodosAndRender();
+    login({
+      login: "pasha",
+      password: "1111",
+    }).then((user) => {
+      setToken(`Bearer ${user.user.token}`);
+      fetchTodosAndRender();
+    });
   });
 }
